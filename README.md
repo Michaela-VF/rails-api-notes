@@ -1,78 +1,57 @@
-# Rails CRUD API Template
+# This is an simple api rails app. 
 
-## Overview
+It has a 
+- Notes Model with 'title' and 'content', 
+- RESTful routes, and a 
+- Notes Controller 'actions' for 'index', 'show' and 'create'; 
+the Notes Controller 'fetches' or 'creates' records ('Notes') and it returns 'JSON' responses ('strong params' are used to control input). 
 
-This is a minimal Ruby on Rails API template used to:
-* practice CRUD operations, 
-* RESTful API design, 
-* data transformations, and 
-* debugging workflows.
+# STEPS:
+1. rails g model Note title:string content:text
+2. rails db:migrate
+3. rails g controller Notes 
+4. Add/modify 'config/routes.rb' and let rails mapping them with the actions (api endpoints):
+    Rails.application.routes.draw do
+        resources :notes, only: [:index, :show, :create]
+    end
+5. Build Controller '(app/controllers/notes_controller.rb)' where the actions live (:index, :show, :create)
+6. Test with curl - Example:
+    # create1
+    curl -X POST http://localhost:3000/notes \
+    -H "Content-Type: application/json" \
+    -d '{"note": {"title": "First", "content": "Hello"}}'
 
-It is intentionally lightweight to support fast iteration and practice.
+    # index
+    curl http://localhost:3000/notes :URL too
 
----
+    # show
+    curl http://localhost:3000/notes/1 :URL too
 
-## Tech Stack
+    # create2
+    curl -X POST http://localhost:3000/notes \
+    -H "Content-Type: application/json" \
+    -d '{"note": {"title": "Second", "content": "Soliloquy"}}'
 
-* Ruby
-* Ruby on Rails (API-only mode)
-* PostgreSQL (already 'rails db:create + rails db:migrate')
-* RSpec (testing)
-* RuboCop (linting)
-* SimpleCov (test coverage)
+        # index
+    curl http://localhost:3000/notes :URL too
 
----
+    # show
+    curl http://localhost:3000/notes/2 :URL too
 
-## Purpose
 
-This template is used to practice core backend engineering patterns:
+# TESTING RIGOROUSLY:
+rails s
 
-* CRUD API development (create, read, update, delete)
-* RESTful routing and controller design
-* Data filtering and transformation logic
-* Writing and debugging tests
-* Simulating real-world backend tasks
+rails db:version
 
----
+rails db:migrate:status
 
-## Setup
+rails console (or psql rails_crud_template_development - SELECT * FROM notes)
+    Note.all
 
-```bash id="q8m1xv"
-bundle install
-rails db:create
-rails db:migrate
-rails server
-```
+curl http://localhost:3000/notes
 
----
+curl -X POST http://localhost:3000/notes \
+  -H "Content-Type: application/json" \
+  -d '{"note": {"title": "Test", "content": "Hello"}}'
 
-## Testing
-
-```bash id="t4k9lz"
-bundle exec rspec
-```
-
----
-
-## Linting
-
-```bash id="w2p7qa"
-bundle exec rubocop
-```
-
----
-
-## Example Endpoints (practice targets)
-
-* POST /users
-* GET /users/:id
-* PATCH /users/:id
-* DELETE /users/:id
-* GET /users?status=active (filtering)
-
----
-
-## Notes
-
-This project is intentionally minimal. 
-Features addition incrementally to focus on understanding core backend patterns rather than framework complexity.
